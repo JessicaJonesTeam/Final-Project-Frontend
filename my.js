@@ -331,6 +331,38 @@ $(document).ready(function (ev) {
         });
     });
 
+
+    // $('#update-users-button').click(function (ev) {
+    //     ev.preventDefault();
+    //
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: 'http://localhost:8080/admin/users/update',
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "Authorization": localStorage.getItem("token")
+    //         },
+    //         data: JSON.stringify({
+    //             "username": username,
+    //             "password": password,
+    //             "eik": eik,
+    //             "email": email
+    //         })
+    //
+    //     }).done(function (body) {
+    //         // create user
+    //
+    //     }).fail(function (xhr, status, error) {
+    //         new Noty({
+    //             text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+    //             layout: 'topCenter',
+    //             type: 'error',
+    //             theme: 'mint',
+    //             timeout: 3000
+    //         }).show();
+    //     });
+    // });
+
     $('#create-bill-button').click(function (ev) {
         // ev.preventDefault();
 
@@ -518,11 +550,110 @@ $(document).ready(function (ev) {
         });
     });
 
+    $('#list-unpaid_bills_subscriber-button').click(function (ev) {
+        // ev.preventDefault();
+
+        $('main')
+            .append(
+                '<div class="container">' +
+                '<div id="login-row" class="row justify-content-center align-items-center">' +
+                '<div id="login-column" class="col-md-6">' +
+                '<div id="login-box" class="col-md-12">' +
+                '<form id="login-form" class="form" action="" method="post">' +
+                '<h3 class="text-center">Enter Subscriber Phone Number</h3>' +
+                '<div class="form-group">' +
+                '<label for="phoneNumber" >Phone Number:</label>' +
+                '<br>' +
+                '<input type="text" name="phoneNumber" id="phoneNumber" class="form-control">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<button id = "submit-phone-button" type="button" name="submit" class=btn btn-primary" value="submit">Submit</button>' +
+                '</div>'
+            );
+
+        $('main').on('click', '#submit-phone-button', function (ev) {
+            ev.preventDefault();
+
+            let phoneNumber = $('#phoneNumber').val();
 
 
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/bank/bills/' + phoneNumber,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+
+            }).done((data) => {
+                data = JSON.parse(data)
+                var json_obj = data;
+                $('main')
+                    .append(
+                        '<table class="table table-hover">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th scope="col">ID</th>' +
+                        '<th scope="col">Subscriber</th>' +
+                        '<th scope="col">Phone Number</th>' +
+                        '<th scope="col">Service</th>' +
+                        '<th scope="col">Start Date</th>' +
+                        '<th scope="col">End Date</th>' +
+                        '<th scope="col">Amount</th>' +
+                        '<th scope="col">Currency</th>' +
+                        '</tr>' +
+                        '</thead>');
+                for (var i in json_obj)
+                    $('table')
+                        .append(
+                            '<tbody>' +
+                            '<tr class="table-active">' +
+                            '<td>' + json_obj[i].id + '</td>' +
+                            '<td>' + json_obj[i].subscriber + '</td>' +
+                            '<td>' + json_obj[i].phoneNumber + '</td>' +
+                            '<td>' + json_obj[i].service + '</td>' +
+                            '<td>' + json_obj[i].startDate + '</td>' +
+                            '<td>' + json_obj[i].endDate + '</td>' +
+                            '<td>' + json_obj[i].amount + '</td>' +
+                            '<td>' + json_obj[i].currency + '</td>' +
+                            '<td><button type="button mr-auto" class="btn btn-secondary" id="pay-bill-button">Pay</button></td>' +
+                            '</tr>' +
+                            '<tbody>' +
+                            '</table>'
+                        );
+
+                $('main').on('click', '#pay-bill-button', function (e) {
+                    e.preventDefault();
+
+                    var currow = $(this).closest('tr');
+                    var userID = currow.find('td:eq(0)').text();
+                    var phoneNumber = currow.find('td:eq(2)').text();
 
 
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": localStorage.getItem("token")
+                        }
+                    }).done(function (body) {
+                        alert("bill paid");
+                    }).fail(function (xhr, status, error) {
+                        new Noty({
+                            text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                            layout: 'topCenter',
+                            type: 'error',
+                            theme: 'mint',
+                            timeout: 3000
+                        }).show();
 
+                    });
+                });
+            });
+        });
+
+    });
 });
 
 
