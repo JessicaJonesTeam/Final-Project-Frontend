@@ -2,7 +2,7 @@ $(document).ready(function (ev) {
 
 
 
-    //<!-------------------ADMIN MODULE---------------------!>
+    //<!-------------------ADMIN MODULE-----TESTED----------------!>
 
 
     let auth = null;
@@ -48,7 +48,9 @@ $(document).ready(function (ev) {
 
 
     $('#list-users-button').click(function (ev) {
+        $('main').empty()
         ev.preventDefault();
+
 
         $.ajax({
             type: 'GET',
@@ -79,7 +81,7 @@ $(document).ready(function (ev) {
                         '<tbody>' +
                         '<tr class="table-active">' +
                         '<td>' + json_obj[i].id + '</td>' +
-                        '<th>' + json_obj[i].username + '</th>' +
+                        '<td>' + json_obj[i].username + '</td>' +
                         '<td>' + json_obj[i].email + '</td>' +
                         '<td>' + json_obj[i].EIK + '</td>' +
                         '<td>' + json_obj[i].role + '</td>' +
@@ -91,142 +93,161 @@ $(document).ready(function (ev) {
                         '<tbody>' +
                         '</table>'
                     );
+        }).fail(function (xhr, status, error) {
+            new Noty({
+                text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                layout: 'topCenter',
+                type: 'error',
+                theme: 'mint',
+                timeout: 3000
+            }).show();
+            // .fail()
 
-            $('main').on('click', '#delete-user-button', function (e) {
-                e.preventDefault();
+        });
 
-                var currow = $(this).closest('tr');
-                var userID = currow.find('td:eq(0)').text();
+        $('main').on('click', '#delete-user-button', function (e) {
+            $('table').detach()
+            e.preventDefault();
 
-                $.ajax({
-                    type: 'POST',
-                    url: 'http://localhost:8080/admin/users/delete/' + userID,
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": localStorage.getItem("token")
-                    }
-                }).done(function (body) {
-                    alert("user Deleted");
-                }).fail(function (xhr, status, error) {
-                    new Noty({
-                        text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
-                        layout: 'topCenter',
-                        type: 'error',
-                        theme: 'mint',
-                        timeout: 3000
-                    }).show();
-                }).fail(function (xhr, status, error) {
-                    new Noty({
-                        text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
-                        layout: 'topCenter',
-                        type: 'error',
-                        theme: 'mint',
-                        timeout: 3000
-                    }).show();
-                });
+            var currow = $(this).closest('tr');
+            var userID = currow.find('td:eq(0)').text();
+            var username = currow.find('td:eq(1)').text();
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/admin/users/delete/' + userID,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+            }).done(function (body) {
+                new Noty({
+                    text: "Successfully deleted user - " + username + "!",
+                    layout: 'topCenter',
+                    type: 'success',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
+            }).fail(function (xhr, status, error) {
+                new Noty({
+                    text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                    layout: 'topCenter',
+                    type: 'error',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
+
+            });
+        });
+
+
+        $('main').on('click', '#edit-user-button', function (e) {
+            $('table').detach()
+            e.preventDefault();
+
+            var currow = $(this).closest('tr');
+            var userID = currow.find('td:eq(0)').text();
+
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/admin/users/' + userID,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+            }).done((data) => {
+                var item = JSON.parse(data);
+                $('main')
+                    .append(
+                        '<div class="container">' +
+                        '<div id="login-row" >' +
+                        // '<div id="login-column" class="col-md-6">' +
+                        // '<div id="login-box" class="col-md-12">' +
+                        '<form id="login-form" class="form" action="" method="post">' +
+                        '<h3 class="text-center>Edit user</h3>' +
+                        '<div class="form-group row">' +
+                        '<label for="id" >ID:</label>' +
+                        '<br>' +
+                        '<input type="text" name="id" id="id" value = "' + item.id + '" class="form-control" disabled>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="username" >Username:</label>' +
+                        '<br>' +
+                        '<input type="text" name="username" id="username" value = "' + item.username + '" class="form-control">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="password" >Password:</label>' +
+                        '<br>' +
+                        '<input type="password" name="password" id="password" value = "' + item.password + '" class="form-control">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="eik" >EIK:</label>' +
+                        '<br>' +
+                        '<input type="text" name="eik" id="eik" value = "' + item.EIK + '" class="form-control">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="email" >Email:</label>' +
+                        '<br>' +
+                        '<input type="email" name="email" id="email" value = "' + item.email + '" class="form-control">' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<button id = "save-user-button" type="button" name="submit" class=btn btn-primary" value="submit">Submit</button>' +
+                        '</div>' +
+                        '</form>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>'
+                    );
+            }).fail(function (xhr, status, error) {
+                new Noty({
+                    text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                    layout: 'topCenter',
+                    type: 'error',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
+
             });
 
+        });
 
-            $('main').on('click', '#edit-user-button', function (e) {
-                e.preventDefault();
-
-                var currow = $(this).closest('tr');
-                var userID = currow.find('td:eq(0)').text();
-
-                $.ajax({
-                    type: 'GET',
-                    url: 'http://localhost:8080/admin/users/' + userID,
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": localStorage.getItem("token")
-                    }
-                }).done((data) => {
-                    var item = JSON.parse(data);
-                    $('main')
-                        .append(
-                            '<div class="container">' +
-                            '<div id="login-row" >' +
-                            // '<div id="login-column" class="col-md-6">' +
-                            // '<div id="login-box" class="col-md-12">' +
-                            '<form id="login-form" class="form" action="" method="post">' +
-                            '<h3 class="text-center>Edit user</h3>' +
-                            '<div class="form-group row">' +
-                            '<label for="id" >ID:</label>' +
-                            '<br>' +
-                            '<input type="text" name="id" id="id" value = "' + item.id + '" class="form-control" disabled>' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                            '<label for="username" >Username:</label>' +
-                            '<br>' +
-                            '<input type="text" name="username" id="username" value = "' + item.username + '" class="form-control">' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                            '<label for="password" >Password:</label>' +
-                            '<br>' +
-                            '<input type="password" name="password" id="password" value = "' + item.password + '" class="form-control">' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                            '<label for="eik" >EIK:</label>' +
-                            '<br>' +
-                            '<input type="text" name="eik" id="eik" value = "' + item.EIK + '" class="form-control">' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                            '<label for="email" >Email:</label>' +
-                            '<br>' +
-                            '<input type="email" name="email" id="email" value = "' + item.email + '" class="form-control">' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                            '<button id = "save-user-button" type="button" name="submit" class=btn btn-primary" value="submit">Submit</button>' +
-                            '</div>' +
-                            '</form>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>'
-                        );
-                    $('main').on('click', '#save-user-button', function (ev) {
-                        ev.preventDefault();
-                        let id = $('#id').val();
-                        let username = $('#username').val();
-                        let password = $('#password').val();
-                        let eik = $('#eik').val();
-                        let email = $('#email').val();
+        $('main').on('click', '#save-user-button', function (ev) {
+            ev.preventDefault();
+            let id = $('#id').val();
+            let username = $('#username').val();
+            let password = $('#password').val();
+            let eik = $('#eik').val();
+            let email = $('#email').val();
 
 
-                        $.ajax({
-                            type: 'POST',
-                            url: 'http://localhost:8080/admin/users/update',
-                            headers: {
-                                "Content-Type": "application/json",
-                                "Authorization": localStorage.getItem("token")
-                            },
-                            data: JSON.stringify({
-                                "id": id,
-                                "username": username,
-                                "password": password,
-                                "eik": eik,
-                                "email": email,
-                                // "roles": [{
-                                //     "authority": "ROLE_ADMIN"
-                                // }]
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/admin/users/update',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                },
+                data: JSON.stringify({
+                    "id": id,
+                    "username": username,
+                    "password": password,
+                    "eik": eik,
+                    "email": email,
+                    // "roles": [{
+                    //     "authority": "ROLE_ADMIN"
+                    // }]
 
-                            })
+                })
 
-                        }).done(function (body) {
-                            alert("user Edited");
-                        }).fail(function (xhr, status, error) {
-                            new Noty({
-                                text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
-                                layout: 'topCenter',
-                                type: 'error',
-                                theme: 'mint',
-                                timeout: 3000
-                            }).show();
-                        });
-                    });
-                });
-
-
+            }).done(function (body) {
+                new Noty({
+                    text: "Successfully edit user - " + username + "!",
+                    layout: 'topCenter',
+                    type: 'success',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
             }).fail(function (xhr, status, error) {
                 new Noty({
                     text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
@@ -236,11 +257,14 @@ $(document).ready(function (ev) {
                     timeout: 3000
                 }).show();
             });
+            $('.container').detach()
+
         });
     });
 
 
     $('#create-users-button').click(function (ev) {
+        $('main').empty()
 
         $('main')
             .append(
@@ -289,6 +313,7 @@ $(document).ready(function (ev) {
             );
 
         $('main').on('click', '#submit-users-button', function (ev) {
+
             ev.preventDefault();
 
 
@@ -318,7 +343,13 @@ $(document).ready(function (ev) {
                 })
 
             }).done(function (body) {
-                alert("user Created");
+                new Noty({
+                    text: "Successfully create user - " + username + "!",
+                    layout: 'topCenter',
+                    type: 'success',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
             }).fail(function (xhr, status, error) {
                 new Noty({
                     text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
@@ -328,43 +359,46 @@ $(document).ready(function (ev) {
                     timeout: 3000
                 }).show();
             });
+            $('.container').detach()
+
         });
     });
 
 
-    // $('#update-users-button').click(function (ev) {
-    //     ev.preventDefault();
-    //
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: 'http://localhost:8080/admin/users/update',
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Authorization": localStorage.getItem("token")
-    //         },
-    //         data: JSON.stringify({
-    //             "username": username,
-    //             "password": password,
-    //             "eik": eik,
-    //             "email": email
-    //         })
-    //
-    //     }).done(function (body) {
-    //         // create user
-    //
-    //     }).fail(function (xhr, status, error) {
-    //         new Noty({
-    //             text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
-    //             layout: 'topCenter',
-    //             type: 'error',
-    //             theme: 'mint',
-    //             timeout: 3000
-    //         }).show();
-    //     });
-    // });
+// $('#update-users-button').click(function (ev) {
+//     ev.preventDefault();
+//
+//     $.ajax({
+//         type: 'POST',
+//         url: 'http://localhost:8080/admin/users/update',
+//         headers: {
+//             "Content-Type": "application/json",
+//             "Authorization": localStorage.getItem("token")
+//         },
+//         data: JSON.stringify({
+//             "username": username,
+//             "password": password,
+//             "eik": eik,
+//             "email": email
+//         })
+//
+//     }).done(function (body) {
+//         // create user
+//
+//     }).fail(function (xhr, status, error) {
+//         new Noty({
+//             text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+//             layout: 'topCenter',
+//             type: 'error',
+//             theme: 'mint',
+//             timeout: 3000
+//         }).show();
+//     });
+// });
 
     $('#create-bill-button').click(function (ev) {
         // ev.preventDefault();
+        $('main').empty()
 
         $('main')
             .append(
@@ -434,6 +468,7 @@ $(document).ready(function (ev) {
             let amount = $('#amount').val();
             let currencyName = $('#currency').val();
 
+            $('.container').detach()
 
             $.ajax({
                 type: 'POST',
@@ -453,7 +488,13 @@ $(document).ready(function (ev) {
                 })
 
             }).done(function (body) {
-                alert("bill Created");
+                new Noty({
+                    text: "Successfully create new payment for - " + subscriberPhone + "!",
+                    layout: 'topCenter',
+                    type: 'success',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
             }).fail(function (xhr, status, error) {
                 new Noty({
                     text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
@@ -464,14 +505,18 @@ $(document).ready(function (ev) {
                 }).show();
 
             });
+            $('.container').detach()
+
         });
     });
 
 
-//<!-------------------BANK MODULE---------------------!>
+//<!-------------------BANK MODULE------TESTED---------------!>
 
 
     $('#list-unpaid_bills-button').click(function (ev) {
+        $('main').empty()
+
         ev.preventDefault();
 
         $.ajax({
@@ -518,39 +563,60 @@ $(document).ready(function (ev) {
                         '<tbody>' +
                         '</table>'
                     );
+        }).fail(function (xhr, status, error) {
+            new Noty({
+                text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                layout: 'topCenter',
+                type: 'error',
+                theme: 'mint',
+                timeout: 3000
+            }).show();
+        });
 
-            $('main').on('click', '#pay-bill-button', function (e) {
-                e.preventDefault();
 
-                var currow = $(this).closest('tr');
-                var userID = currow.find('td:eq(0)').text();
-                var phoneNumber = currow.find('td:eq(2)').text();
+        $('main').on('click', '#pay-bill-button', function (e) {
+            e.preventDefault();
+
+            let currow = $(this).closest('tr');
+            let userID = currow.find('td:eq(0)').text();
+            let phoneNumber = currow.find('td:eq(2)').text();
+            let service = currow.find('td:eq(3)').text();
+
+            $('table').detach()
 
 
-                $.ajax({
-                    type: 'GET',
-                    url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": localStorage.getItem("token")
-                    }
-                }).done(function (body) {
-                    alert("user Deleted");
-                }).fail(function (xhr, status, error) {
-                    new Noty({
-                        text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
-                        layout: 'topCenter',
-                        type: 'error',
-                        theme: 'mint',
-                        timeout: 3000
-                    }).show();
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+            }).done(function (body) {
+                new Noty({
+                    text: "Successfully pay for - " + service + "for" + phoneNumber,
+                    layout: 'topCenter',
+                    type: 'success',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
+            }).fail(function (xhr, status, error) {
+                new Noty({
+                    text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                    layout: 'topCenter',
+                    type: 'error',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
 
-                });
             });
         });
     });
 
+
     $('#list-unpaid_bills_subscriber-button').click(function (ev) {
+        $('main').empty()
+
         // ev.preventDefault();
 
         $('main')
@@ -572,14 +638,16 @@ $(document).ready(function (ev) {
             );
 
         $('main').on('click', '#submit-phone-button', function (ev) {
+
             ev.preventDefault();
 
             let phoneNumber = $('#phoneNumber').val();
+            $('.container').detach()
 
 
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/bank/bills/' + phoneNumber,
+                url: 'http://localhost:8080/bank/bills/unpaid/' + phoneNumber,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -621,40 +689,283 @@ $(document).ready(function (ev) {
                             '<tbody>' +
                             '</table>'
                         );
+            }).fail(function (xhr, status, error) {
+                new Noty({
+                    text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                    layout: 'topCenter',
+                    type: 'error',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
+            });
+        });
 
-                $('main').on('click', '#pay-bill-button', function (e) {
-                    e.preventDefault();
+        $('main').on('click', '#pay-bill-button', function (e) {
 
-                    var currow = $(this).closest('tr');
-                    var userID = currow.find('td:eq(0)').text();
-                    var phoneNumber = currow.find('td:eq(2)').text();
+            e.preventDefault();
+
+            let currow = $(this).closest('tr');
+            let userID = currow.find('td:eq(0)').text();
+            let phoneNumber = currow.find('td:eq(2)').text();
+            let service = currow.find('td:eq(3)').text();
+
+            $('table').detach()
+
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+            }).done(function (body) {
+                new Noty({
+                    text: "Successfully pay for - " + service + "for" + phoneNumber,
+                    layout: 'topCenter',
+                    type: 'success',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
+            }).fail(function (xhr, status, error) {
+                new Noty({
+                    text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                    layout: 'topCenter',
+                    type: 'error',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
+
+            });
+        });
+    });
 
 
-                    $.ajax({
-                        type: 'GET',
-                        url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": localStorage.getItem("token")
-                        }
-                    }).done(function (body) {
-                        alert("bill paid");
-                    }).fail(function (xhr, status, error) {
-                        new Noty({
-                            text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
-                            layout: 'topCenter',
-                            type: 'error',
-                            theme: 'mint',
-                            timeout: 3000
-                        }).show();
+    $('#list-subscribers-button').click(function (ev) {
+        $('main').empty()
 
-                    });
+        ev.preventDefault();
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/bank/subscribers',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("token")
+            }
+
+        }).done((data) => {
+
+            $('main')
+                .append(
+                    '<table class="table table-hover">' +
+                    '<thead>' +
+                    '<tr>' +
+                    '<th scope="col">ID</th>' +
+                    '<th scope="col">Full Name</th>' +
+                    '<th scope="col">EGN</th>' +
+                    '<th scope="col">Phone Number</th>' +
+                    '<th scope="col">EGN</th>' +
+                    '</tr>' +
+                    '</thead>');
+            var json_obj = JSON.parse(data);
+            for (var i in json_obj)
+                $('table')
+                    .append(
+                        '<tbody>' +
+                        '<tr class="table-active">' +
+                        '<td>' + json_obj[i].id + '</td>' +
+                        '<td>' + json_obj[i].fullName + '</td>' +
+                        '<td>' + json_obj[i].egn + '</td>' +
+                        '<td>' + json_obj[i].phoneNumber + '</td>' +
+                        '<td>' + json_obj[i].egn + '</td>' +
+                        // check
+                        '<td><button type="button mr-auto" class="btn btn-secondary" id="subscriber-pending_payments-button">Pending Payments</button></td>' +
+                        '<td><button type="button mr-auto" class="btn btn-secondary" id="subscriber-all_payments-button">All Payments</button></td>' +
+                        '</tr>' +
+                        '<tbody>' +
+                        '</table>'
+                    );
+        }).fail(function (xhr, status, error) {
+            new Noty({
+                text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                layout: 'topCenter',
+                type: 'error',
+                theme: 'mint',
+                timeout: 3000
+            }).show();
+        });
+
+
+        $('main').on('click', '#subscriber-pending_payments-button', function (e) {
+            e.preventDefault();
+
+            let currow = $(this).closest('tr');
+            let userPhoneNumber = currow.find('td:eq(3)').text();
+
+            $('table').detach()
+
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/bank/bills/unpaid/' + userPhoneNumber,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+            }).done((data) => {
+                data = JSON.parse(data)
+                var json_obj = data;
+                $('main')
+                    .append(
+                        '<table class="table table-hover">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th scope="col">ID</th>' +
+                        '<th scope="col">Subscriber</th>' +
+                        '<th scope="col">Phone Number</th>' +
+                        '<th scope="col">Service</th>' +
+                        '<th scope="col">Start Date</th>' +
+                        '<th scope="col">End Date</th>' +
+                        '<th scope="col">Amount</th>' +
+                        '<th scope="col">Currency</th>' +
+                        '</tr>' +
+                        '</thead>');
+                for (var i in json_obj)
+                    $('table')
+                        .append(
+                            '<tbody>' +
+                            '<tr class="table-active">' +
+                            '<td>' + json_obj[i].id + '</td>' +
+                            '<td>' + json_obj[i].subscriber + '</td>' +
+                            '<td>' + json_obj[i].phoneNumber + '</td>' +
+                            '<td>' + json_obj[i].service + '</td>' +
+                            '<td>' + json_obj[i].startDate + '</td>' +
+                            '<td>' + json_obj[i].endDate + '</td>' +
+                            '<td>' + json_obj[i].amount + '</td>' +
+                            '<td>' + json_obj[i].currency + '</td>' +
+                            '<td><button type="button mr-auto" class="btn btn-secondary" id="pay-bill-button">Pay</button></td>' +
+                            '</tr>' +
+                            '<tbody>' +
+                            '</table>'
+                        );
+            }).fail(function (xhr, status, error) {
+                new Noty({
+                    text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                    layout: 'topCenter',
+                    type: 'error',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
+            });
+
+            $('main').on('click', '#pay-bill-button', function (e) {
+                e.preventDefault();
+
+                let currow = $(this).closest('tr');
+                let userID = currow.find('td:eq(0)').text();
+                let phoneNumber = currow.find('td:eq(2)').text();
+                let service = currow.find('td:eq(3)').text();
+
+                $('table').detach()
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": localStorage.getItem("token")
+                    }
+                }).done(function (body) {
+                    new Noty({
+                        text: "Successfully pay for - " + service + "for" + phoneNumber,
+                        layout: 'topCenter',
+                        type: 'success',
+                        theme: 'mint',
+                        timeout: 3000
+                    }).show();
+                }).fail(function (xhr, status, error) {
+                    new Noty({
+                        text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                        layout: 'topCenter',
+                        type: 'error',
+                        theme: 'mint',
+                        timeout: 3000
+                    }).show();
+
                 });
             });
         });
 
+
+        $('main').on('click', '#subscriber-all_payments-button', function (e) {
+            e.preventDefault();
+
+            let currow = $(this).closest('tr');
+            let userPhoneNumber = currow.find('td:eq(2)').text();
+
+            $('table').detach()
+
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/bank/bills/' + userPhoneNumber,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+            }).done((data) => {
+                data = JSON.parse(data)
+                let json_obj = data;
+                $('main')
+                    .append(
+                        '<table class="table table-hover">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th scope="col">ID</th>' +
+                        '<th scope="col">Subscriber</th>' +
+                        '<th scope="col">Phone Number</th>' +
+                        '<th scope="col">Service</th>' +
+                        '<th scope="col">Start Date</th>' +
+                        '<th scope="col">End Date</th>' +
+                        '<th scope="col">Payment Date</th>' +
+                        '<th scope="col">Amount</th>' +
+                        '<th scope="col">Currency</th>' +
+                        '</tr>' +
+                        '</thead>');
+                for (let i in json_obj)
+                    $('table')
+                        .append(
+                            '<tbody>' +
+                            '<tr class="table-active">' +
+                            '<td>' + json_obj[i].id + '</td>' +
+                            '<td>' + json_obj[i].subscriber + '</td>' +
+                            '<td>' + json_obj[i].phoneNumber + '</td>' +
+                            '<td>' + json_obj[i].service + '</td>' +
+                            '<td>' + json_obj[i].startDate + '</td>' +
+                            '<td>' + json_obj[i].endDate + '</td>' +
+                            '<td>' + json_obj[i].paymentDate + '</td>' +
+                            '<td>' + json_obj[i].amount + '</td>' +
+                            '<td>' + json_obj[i].currency + '</td>' +
+                            '</tr>' +
+                            '<tbody>' +
+                            '</table>'
+                        );
+            }).fail(function (xhr, status, error) {
+                new Noty({
+                    text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                    layout: 'topCenter',
+                    type: 'error',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
+            });
+        });
     });
 });
+
+
+
+
+
+
 
 
 
