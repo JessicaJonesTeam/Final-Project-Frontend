@@ -331,38 +331,6 @@ $(document).ready(function (ev) {
         });
     });
 
-
-    // $('#update-users-button').click(function (ev) {
-    //     ev.preventDefault();
-    //
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: 'http://localhost:8080/admin/users/update',
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Authorization": localStorage.getItem("token")
-    //         },
-    //         data: JSON.stringify({
-    //             "username": username,
-    //             "password": password,
-    //             "eik": eik,
-    //             "email": email
-    //         })
-    //
-    //     }).done(function (body) {
-    //         // create user
-    //
-    //     }).fail(function (xhr, status, error) {
-    //         new Noty({
-    //             text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
-    //             layout: 'topCenter',
-    //             type: 'error',
-    //             theme: 'mint',
-    //             timeout: 3000
-    //         }).show();
-    //     });
-    // });
-
     $('#create-bill-button').click(function (ev) {
         // ev.preventDefault();
 
