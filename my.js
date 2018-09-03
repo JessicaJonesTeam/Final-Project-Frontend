@@ -73,12 +73,12 @@ $(document).ready(function (ev) {
                     '<th scope="col">EIK</th>' +
                     '<th scope="col">Roles</th>' +
                     '</tr>' +
-                    '</thead>');
-            var json_obj = JSON.parse(data);
-            for (var i in json_obj)
+                    '</thead>' +
+                    '<tbody>');
+            let json_obj = JSON.parse(data);
+            for (let i in json_obj) {
                 $('table')
-                    .append(
-                        '<tbody>' +
+                    .html(
                         '<tr class="table-active">' +
                         '<td>' + json_obj[i].id + '</td>' +
                         '<td>' + json_obj[i].username + '</td>' +
@@ -89,10 +89,13 @@ $(document).ready(function (ev) {
                         '<td><button type="button mr-auto" class="btn btn-secondary" id="edit-user-button">Edit</button></td>' +
                         '<td><button type="button mr-auto" class="btn btn-secondary" id="delete-user-button">Delete</button></td>' +
                         '</tr>' +
-                        '</th>' +
-                        '<tbody>' +
-                        '</table>'
-                    );
+                        '</th>'
+                    )
+            }
+            $('table')
+                .append(
+                    '</tbody>' +
+                    '</table>');
         }).fail(function (xhr, status, error) {
             new Noty({
                 text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
@@ -105,7 +108,8 @@ $(document).ready(function (ev) {
 
         });
 
-        $('main').on('click', '#delete-user-button', function (e) {
+
+        $('main').off().on('click', '#delete-user-button', function (e) {
             $('table').detach()
             e.preventDefault();
 
@@ -140,8 +144,7 @@ $(document).ready(function (ev) {
             });
         });
 
-
-        $('main').on('click', '#edit-user-button', function (e) {
+        $('main').off().on('click', '#edit-user-button', function (e) {
             $('table').detach()
             e.preventDefault();
 
@@ -158,7 +161,7 @@ $(document).ready(function (ev) {
             }).done((data) => {
                 var item = JSON.parse(data);
                 $('main')
-                    .append(
+                    .html(
                         '<div class="container">' +
                         '<div id="login-row" >' +
                         // '<div id="login-column" class="col-md-6">' +
@@ -210,64 +213,64 @@ $(document).ready(function (ev) {
 
             });
 
-        });
-
-        $('main').on('click', '#save-user-button', function (ev) {
-            ev.preventDefault();
-            let id = $('#id').val();
-            let username = $('#username').val();
-            let password = $('#password').val();
-            let eik = $('#eik').val();
-            let email = $('#email').val();
+            $('main').off().on('click', '#save-user-button', function (ev) {
+                ev.preventDefault();
+                let id = $('#id').val();
+                let username = $('#username').val();
+                let password = $('#password').val();
+                let eik = $('#eik').val();
+                let email = $('#email').val();
 
 
-            $.ajax({
-                type: 'POST',
-                url: 'http://localhost:8080/admin/users/update',
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": localStorage.getItem("token")
-                },
-                data: JSON.stringify({
-                    "id": id,
-                    "username": username,
-                    "password": password,
-                    "eik": eik,
-                    "email": email,
-                    // "roles": [{
-                    //     "authority": "ROLE_ADMIN"
-                    // }]
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:8080/admin/users/update',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": localStorage.getItem("token")
+                    },
+                    data: JSON.stringify({
+                        "id": id,
+                        "username": username,
+                        "password": password,
+                        "eik": eik,
+                        "email": email,
+                        // "roles": [{
+                        //     "authority": "ROLE_ADMIN"
+                        // }]
 
-                })
+                    })
 
-            }).done(function (body) {
-                new Noty({
-                    text: "Successfully edit user - " + username + "!",
-                    layout: 'topCenter',
-                    type: 'success',
-                    theme: 'mint',
-                    timeout: 3000
-                }).show();
-            }).fail(function (xhr, status, error) {
-                new Noty({
-                    text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
-                    layout: 'topCenter',
-                    type: 'error',
-                    theme: 'mint',
-                    timeout: 3000
-                }).show();
+                }).done(function (body) {
+                    new Noty({
+                        text: "Successfully edit user - " + username + "!",
+                        layout: 'topCenter',
+                        type: 'success',
+                        theme: 'mint',
+                        timeout: 3000
+                    }).show();
+                }).fail(function (xhr, status, error) {
+                    new Noty({
+                        text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                        layout: 'topCenter',
+                        type: 'error',
+                        theme: 'mint',
+                        timeout: 3000
+                    }).show();
+                });
+                $('.container').detach()
+
             });
-            $('.container').detach()
-
         });
-    });
 
+
+    });
 
     $('#create-users-button').click(function (ev) {
         $('main').empty()
 
         $('main')
-            .append(
+            .html(
                 '<div class="container">' +
                 '<div id="login-row" class="row justify-content-center align-items-center">' +
                 '<div id="login-column" class="col-md-6">' +
@@ -312,7 +315,8 @@ $(document).ready(function (ev) {
                 '</div>'
             );
 
-        $('main').on('click', '#submit-users-button', function (ev) {
+
+        $('main').off().on('click', '#submit-users-button', function (ev) {
 
             ev.preventDefault();
 
@@ -401,7 +405,7 @@ $(document).ready(function (ev) {
         $('main').empty()
 
         $('main')
-            .append(
+            .html(
                 '<div class="container">' +
                 '<div id="login-row" class="row justify-content-center align-items-center">' +
                 '<div id="login-column" class="col-md-6">' +
@@ -457,7 +461,7 @@ $(document).ready(function (ev) {
                 '</div>'
             );
 
-        $('main').on('click', '#submit-bill-button', function (ev) {
+        $('main').off().on('click', '#submit-bill-button', function (ev) {
             ev.preventDefault();
 
 
@@ -515,7 +519,7 @@ $(document).ready(function (ev) {
 
 
     $('#list-unpaid_bills-button').click(function (ev) {
-        $('main').empty()
+        // $('main').empty()
 
         ev.preventDefault();
 
@@ -531,7 +535,7 @@ $(document).ready(function (ev) {
             data = JSON.parse(data)
             var json_obj = data;
             $('main')
-                .append(
+                .html(
                     '<table class="table table-hover">' +
                     '<thead>' +
                     '<tr>' +
@@ -544,11 +548,11 @@ $(document).ready(function (ev) {
                     '<th scope="col">Amount</th>' +
                     '<th scope="col">Currency</th>' +
                     '</tr>' +
-                    '</thead>');
-            for (var i in json_obj)
+                    '</thead>' +
+                    '<tbody>');
+            for (var i in json_obj) {
                 $('table')
                     .append(
-                        '<tbody>' +
                         '<tr class="table-active">' +
                         '<td>' + json_obj[i].id + '</td>' +
                         '<td>' + json_obj[i].subscriber + '</td>' +
@@ -558,11 +562,14 @@ $(document).ready(function (ev) {
                         '<td>' + json_obj[i].endDate + '</td>' +
                         '<td>' + json_obj[i].amount + '</td>' +
                         '<td>' + json_obj[i].currency + '</td>' +
-                        '<td><button type="button mr-auto" class="btn btn-secondary" id="pay-bill-button">Pay</button></td>' +
-                        '</tr>' +
-                        '<tbody>' +
-                        '</table>'
-                    );
+                        '<td><button type="button mr-auto" class="btn btn-secondary pay-bill-button" >Pay</button></td>' +
+                        '</tr>'
+                    )
+            }
+            $('table')
+                .append(
+                    '</tbody>' +
+                    '</table>');
         }).fail(function (xhr, status, error) {
             new Noty({
                 text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
@@ -573,8 +580,7 @@ $(document).ready(function (ev) {
             }).show();
         });
 
-
-        $('main').on('click', '#pay-bill-button', function (e) {
+        $('main').off().on('click', '.pay-bill-button', function (e) {
             e.preventDefault();
 
             let currow = $(this).closest('tr');
@@ -611,6 +617,8 @@ $(document).ready(function (ev) {
 
             });
         });
+
+
     });
 
 
@@ -620,7 +628,7 @@ $(document).ready(function (ev) {
         // ev.preventDefault();
 
         $('main')
-            .append(
+            .html(
                 '<div class="container">' +
                 '<div id="login-row" class="row justify-content-center align-items-center">' +
                 '<div id="login-column" class="col-md-6">' +
@@ -637,7 +645,7 @@ $(document).ready(function (ev) {
                 '</div>'
             );
 
-        $('main').on('click', '#submit-phone-button', function (ev) {
+        $('main').off().on('click', '#submit-phone-button', function (ev) {
 
             ev.preventDefault();
 
@@ -655,9 +663,9 @@ $(document).ready(function (ev) {
 
             }).done((data) => {
                 data = JSON.parse(data)
-                var json_obj = data;
+                let json_obj = data;
                 $('main')
-                    .append(
+                    .html(
                         '<table class="table table-hover">' +
                         '<thead>' +
                         '<tr>' +
@@ -670,11 +678,11 @@ $(document).ready(function (ev) {
                         '<th scope="col">Amount</th>' +
                         '<th scope="col">Currency</th>' +
                         '</tr>' +
-                        '</thead>');
-                for (var i in json_obj)
+                        '</thead>' +
+                        '<tbody>');
+                for (let i in json_obj) {
                     $('table')
                         .append(
-                            '<tbody>' +
                             '<tr class="table-active">' +
                             '<td>' + json_obj[i].id + '</td>' +
                             '<td>' + json_obj[i].subscriber + '</td>' +
@@ -685,168 +693,13 @@ $(document).ready(function (ev) {
                             '<td>' + json_obj[i].amount + '</td>' +
                             '<td>' + json_obj[i].currency + '</td>' +
                             '<td><button type="button mr-auto" class="btn btn-secondary" id="pay-bill-button">Pay</button></td>' +
-                            '</tr>' +
-                            '<tbody>' +
-                            '</table>'
-                        );
-            }).fail(function (xhr, status, error) {
-                new Noty({
-                    text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
-                    layout: 'topCenter',
-                    type: 'error',
-                    theme: 'mint',
-                    timeout: 3000
-                }).show();
-            });
-        });
-
-        $('main').on('click', '#pay-bill-button', function (e) {
-
-            e.preventDefault();
-
-            let currow = $(this).closest('tr');
-            let userID = currow.find('td:eq(0)').text();
-            let phoneNumber = currow.find('td:eq(2)').text();
-            let service = currow.find('td:eq(3)').text();
-
-            $('table').detach()
-
-            $.ajax({
-                type: 'GET',
-                url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": localStorage.getItem("token")
+                            '</tr>'
+                        )
                 }
-            }).done(function (body) {
-                new Noty({
-                    text: "Successfully pay for - " + service + "for" + phoneNumber,
-                    layout: 'topCenter',
-                    type: 'success',
-                    theme: 'mint',
-                    timeout: 3000
-                }).show();
-            }).fail(function (xhr, status, error) {
-                new Noty({
-                    text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
-                    layout: 'topCenter',
-                    type: 'error',
-                    theme: 'mint',
-                    timeout: 3000
-                }).show();
-
-            });
-        });
-    });
-
-
-    $('#list-subscribers-button').click(function (ev) {
-        $('main').empty()
-
-        ev.preventDefault();
-
-        $.ajax({
-            type: 'GET',
-            url: 'http://localhost:8080/bank/subscribers',
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": localStorage.getItem("token")
-            }
-
-        }).done((data) => {
-
-            $('main')
-                .append(
-                    '<table class="table table-hover">' +
-                    '<thead>' +
-                    '<tr>' +
-                    '<th scope="col">ID</th>' +
-                    '<th scope="col">Full Name</th>' +
-                    '<th scope="col">EGN</th>' +
-                    '<th scope="col">Phone Number</th>' +
-                    '<th scope="col">EGN</th>' +
-                    '</tr>' +
-                    '</thead>');
-            var json_obj = JSON.parse(data);
-            for (var i in json_obj)
                 $('table')
                     .append(
-                        '<tbody>' +
-                        '<tr class="table-active">' +
-                        '<td>' + json_obj[i].id + '</td>' +
-                        '<td>' + json_obj[i].fullName + '</td>' +
-                        '<td>' + json_obj[i].egn + '</td>' +
-                        '<td>' + json_obj[i].phoneNumber + '</td>' +
-                        '<td>' + json_obj[i].egn + '</td>' +
-                        // check
-                        '<td><button type="button mr-auto" class="btn btn-secondary" id="subscriber-pending_payments-button">Pending Payments</button></td>' +
-                        '<td><button type="button mr-auto" class="btn btn-secondary" id="subscriber-all_payments-button">All Payments</button></td>' +
-                        '</tr>' +
-                        '<tbody>' +
-                        '</table>'
-                    );
-        }).fail(function (xhr, status, error) {
-            new Noty({
-                text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
-                layout: 'topCenter',
-                type: 'error',
-                theme: 'mint',
-                timeout: 3000
-            }).show();
-        });
-
-
-        $('main').on('click', '#subscriber-pending_payments-button', function (e) {
-            e.preventDefault();
-
-            let currow = $(this).closest('tr');
-            let userPhoneNumber = currow.find('td:eq(3)').text();
-
-            $('table').detach()
-
-            $.ajax({
-                type: 'GET',
-                url: 'http://localhost:8080/bank/bills/unpaid/' + userPhoneNumber,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": localStorage.getItem("token")
-                }
-            }).done((data) => {
-                data = JSON.parse(data)
-                var json_obj = data;
-                $('main')
-                    .append(
-                        '<table class="table table-hover">' +
-                        '<thead>' +
-                        '<tr>' +
-                        '<th scope="col">ID</th>' +
-                        '<th scope="col">Subscriber</th>' +
-                        '<th scope="col">Phone Number</th>' +
-                        '<th scope="col">Service</th>' +
-                        '<th scope="col">Start Date</th>' +
-                        '<th scope="col">End Date</th>' +
-                        '<th scope="col">Amount</th>' +
-                        '<th scope="col">Currency</th>' +
-                        '</tr>' +
-                        '</thead>');
-                for (var i in json_obj)
-                    $('table')
-                        .append(
-                            '<tbody>' +
-                            '<tr class="table-active">' +
-                            '<td>' + json_obj[i].id + '</td>' +
-                            '<td>' + json_obj[i].subscriber + '</td>' +
-                            '<td>' + json_obj[i].phoneNumber + '</td>' +
-                            '<td>' + json_obj[i].service + '</td>' +
-                            '<td>' + json_obj[i].startDate + '</td>' +
-                            '<td>' + json_obj[i].endDate + '</td>' +
-                            '<td>' + json_obj[i].amount + '</td>' +
-                            '<td>' + json_obj[i].currency + '</td>' +
-                            '<td><button type="button mr-auto" class="btn btn-secondary" id="pay-bill-button">Pay</button></td>' +
-                            '</tr>' +
-                            '<tbody>' +
-                            '</table>'
-                        );
+                        '</tbody>' +
+                        '</table>');
             }).fail(function (xhr, status, error) {
                 new Noty({
                     text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
@@ -857,7 +710,7 @@ $(document).ready(function (ev) {
                 }).show();
             });
 
-            $('main').on('click', '#pay-bill-button', function (e) {
+            $('main').off().on('click', '#pay-bill-button', function (e) {
                 e.preventDefault();
 
                 let currow = $(this).closest('tr');
@@ -892,9 +745,177 @@ $(document).ready(function (ev) {
                     }).show();
 
                 });
-            });
+            })
+            ;
+
         });
 
+
+    });
+
+
+    $('#list-subscribers-button').click(function (ev) {
+        // $('main').empty()
+
+        ev.preventDefault();
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/bank/subscribers',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("token")
+            }
+
+        }).done((data) => {
+
+            $('main')
+                .html(
+                    '<table class="table table-hover">' +
+                    '<thead>' +
+                    '<tr>' +
+                    '<th scope="col">ID</th>' +
+                    '<th scope="col">Full Name</th>' +
+                    '<th scope="col">EGN</th>' +
+                    '<th scope="col">Phone Number</th>' +
+                    '<th scope="col">EGN</th>' +
+                    '</tr>' +
+                    '</thead>' +
+                    '<tbody>');
+            let json_obj = JSON.parse(data);
+            for (let i in json_obj) {
+                $('table')
+                    .append(
+                        '<tr class="table-active">' +
+                        '<td>' + json_obj[i].id + '</td>' +
+                        '<td>' + json_obj[i].fullName + '</td>' +
+                        '<td>' + json_obj[i].egn + '</td>' +
+                        '<td>' + json_obj[i].phoneNumber + '</td>' +
+                        '<td>' + json_obj[i].egn + '</td>' +
+                        // check
+                        '<td><button type="button mr-auto" class="btn btn-secondary" id="subscriber-pending_payments-button">Pending Payments</button></td>' +
+                        '<td><button type="button mr-auto" class="btn btn-secondary" id="subscriber-all_payments-button">All Payments</button></td>' +
+                        '</tr>'
+                    )
+            }
+            $('table')
+                .append(
+                    '</tbody>' +
+                    '</table>');
+        }).fail(function (xhr, status, error) {
+            new Noty({
+                text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                layout: 'topCenter',
+                type: 'error',
+                theme: 'mint',
+                timeout: 3000
+            }).show();
+
+        });
+
+
+        $('main').off().on('click', '#subscriber-pending_payments-button', function (e) {
+            e.preventDefault();
+
+            let currow = $(this).closest('tr');
+            let userPhoneNumber = currow.find('td:eq(3)').text();
+
+            // $('table').detach()
+
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/bank/bills/unpaid/' + userPhoneNumber,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": localStorage.getItem("token")
+                }
+            }).done((data) => {
+                data = JSON.parse(data)
+                let json_obj = data;
+                $('main')
+                    .html(
+                        '<table class="table table-hover">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th scope="col">ID</th>' +
+                        '<th scope="col">Subscriber</th>' +
+                        '<th scope="col">Phone Number</th>' +
+                        '<th scope="col">Service</th>' +
+                        '<th scope="col">Start Date</th>' +
+                        '<th scope="col">End Date</th>' +
+                        '<th scope="col">Amount</th>' +
+                        '<th scope="col">Currency</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '<tbody>');
+                for (let i in json_obj) {
+                    $('table')
+                        .append(
+                            '<tr class="table-active">' +
+                            '<td>' + json_obj[i].id + '</td>' +
+                            '<td>' + json_obj[i].subscriber + '</td>' +
+                            '<td>' + json_obj[i].phoneNumber + '</td>' +
+                            '<td>' + json_obj[i].service + '</td>' +
+                            '<td>' + json_obj[i].startDate + '</td>' +
+                            '<td>' + json_obj[i].endDate + '</td>' +
+                            '<td>' + json_obj[i].amount + '</td>' +
+                            '<td>' + json_obj[i].currency + '</td>' +
+                            '<td><button type="button mr-auto" class="btn btn-secondary" id="pay-bill-button">Pay</button></td>' +
+                            '</tr>'
+                        )
+                }
+                $('table')
+                    .append(
+                        '</tbody>' +
+                        '</table>');
+            }).fail(function (xhr, status, error) {
+                new Noty({
+                    text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                    layout: 'topCenter',
+                    type: 'error',
+                    theme: 'mint',
+                    timeout: 3000
+                }).show();
+            });
+
+            $('main').off().on('click', '#pay-bill-button', function (e) {
+                e.preventDefault();
+
+                let currow = $(this).closest('tr');
+                let userID = currow.find('td:eq(0)').text();
+                let phoneNumber = currow.find('td:eq(2)').text();
+                let service = currow.find('td:eq(3)').text();
+
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": localStorage.getItem("token")
+                    }
+                }).done(function (body) {
+                    new Noty({
+                        text: "Successfully pay for - " + service + "for" + phoneNumber,
+                        layout: 'topCenter',
+                        type: 'success',
+                        theme: 'mint',
+                        timeout: 3000
+                    }).show();
+                }).fail(function (xhr, status, error) {
+                    new Noty({
+                        text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+                        layout: 'topCenter',
+                        type: 'error',
+                        theme: 'mint',
+                        timeout: 3000
+                    }).show();
+
+                });
+            });
+
+
+        });
 
         $('main').on('click', '#subscriber-all_payments-button', function (e) {
             e.preventDefault();
@@ -902,7 +923,7 @@ $(document).ready(function (ev) {
             let currow = $(this).closest('tr');
             let userPhoneNumber = currow.find('td:eq(2)').text();
 
-            $('table').detach()
+            // $('table').detach()
 
             $.ajax({
                 type: 'GET',
@@ -915,7 +936,7 @@ $(document).ready(function (ev) {
                 data = JSON.parse(data)
                 let json_obj = data;
                 $('main')
-                    .append(
+                    .html(
                         '<table class="table table-hover">' +
                         '<thead>' +
                         '<tr>' +
@@ -929,11 +950,11 @@ $(document).ready(function (ev) {
                         '<th scope="col">Amount</th>' +
                         '<th scope="col">Currency</th>' +
                         '</tr>' +
-                        '</thead>');
-                for (let i in json_obj)
+                        '</thead>' +
+                        '<tbody>');
+                for (let i in json_obj) {
                     $('table')
                         .append(
-                            '<tbody>' +
                             '<tr class="table-active">' +
                             '<td>' + json_obj[i].id + '</td>' +
                             '<td>' + json_obj[i].subscriber + '</td>' +
@@ -944,10 +965,14 @@ $(document).ready(function (ev) {
                             '<td>' + json_obj[i].paymentDate + '</td>' +
                             '<td>' + json_obj[i].amount + '</td>' +
                             '<td>' + json_obj[i].currency + '</td>' +
-                            '</tr>' +
-                            '<tbody>' +
-                            '</table>'
-                        );
+                            '</tr>'
+                        )
+                }
+                $('table')
+                    .append(
+                        '</tbody>' +
+                        '</table>');
+
             }).fail(function (xhr, status, error) {
                 new Noty({
                     text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
@@ -958,8 +983,112 @@ $(document).ready(function (ev) {
                 }).show();
             });
         });
+
+
     });
-});
+})
+;
+
+// $('main').off().on('click', '#pay-bill-button', function (e) {
+//
+//     e.preventDefault();
+//
+//     let currow = $(this).closest('tr');
+//     let userID = currow.find('td:eq(0)').text();
+//     let phoneNumber = currow.find('td:eq(2)').text();
+//     let service = currow.find('td:eq(3)').text();
+//
+//     $('table').detach()
+//
+//     $.ajax({
+//         type: 'GET',
+//         url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
+//         headers: {
+//             "Content-Type": "application/json",
+//             "Authorization": localStorage.getItem("token")
+//         }
+//     }).done(function (body) {
+//         new Noty({
+//             text: "Successfully pay for - " + service + "for" + phoneNumber,
+//             layout: 'topCenter',
+//             type: 'success',
+//             theme: 'mint',
+//             timeout: 3000
+//         }).show();
+//     }).fail(function (xhr, status, error) {
+//         new Noty({
+//             text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],
+//             layout: 'topCenter',
+//             type: 'error',
+//             theme: 'mint',
+//             timeout: 3000
+//         }).show();
+//
+//     });
+// })
+// ;
+
+// $('#average_payment_sum_subscriber-button').click(function (ev) {
+//     $('main').empty()
+//
+//     // ev.preventDefault();
+//
+//     $('main')
+//         .append(
+//             '<div class="container">' +
+//             '<div id="login-row" class="row justify-content-center align-items-center">' +
+//             '<div id="login-column" class="col-md-6">' +
+//             '<div id="login-box" class="col-md-12">' +
+//             '<form id="login-form" class="form" action="" method="post">' +
+//             '<h3 class="text-center">Enter Subscriber Phone Number</h3>' +
+//             '<div class="form-group">' +
+//             '<label for="phoneNumber" >Phone Number:</label>' +
+//             '<br>' +
+//             '<input type="text" name="phoneNumber" id="phoneNumber" class="form-control">' +
+//             '</div>' +
+//             '<h3 class="text-center">Enter Start Date:</h3>' +
+//             '<div class="form-group">' +
+//             '<label for="startDate" >Start Date:</label>' +
+//             '<br>' +
+//             '<input type="date" name="startDate" id="startDate" class="form-control">' +
+//             '</div>' +
+//             '<h3 class="text-center">Enter End Date:</h3>' +
+//             '<div class="form-group">' +
+//             '<label for="endDate" >End Date:</label>' +
+//             '<br>' +
+//             '<input type="date" name="endDate" id="endDate" class="form-control">' +
+//             '</div>' +
+//             '<div class="form-group">' +
+//             '<button id = "submit-phone-button" type="button" name="submit" class=btn btn-primary" value="submit">Submit</button>' +
+//             '</div>'
+//         );
+//     $('main').on('click', '#pay-bill-button', function (e) {
+//         e.preventDefault();
+//
+//         let currow = $(this).closest('tr');
+//         let userID = currow.find('td:eq(0)').text();
+//         let phoneNumber = currow.find('td:eq(2)').text();
+//         let service = currow.find('td:eq(3)').text();
+//
+//         $('table').detach()
+//
+//         $.ajax({
+//             type: 'GET',
+//             url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 "Authorization": localStorage.getItem("token")
+//             }
+//         }).done(function (body) {
+//             new Noty({
+//                 text: "Successfully pay for - " + service + "for" + phoneNumber,
+//                 layout: 'topCenter',
+//                 type: 'success',
+//                 theme: 'mint',
+//                 timeout: 3000
+//             }).show();
+//
+//         });
 
 
 
