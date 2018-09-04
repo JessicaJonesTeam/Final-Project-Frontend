@@ -125,7 +125,7 @@ $(document).ready(function (ev) {
                     '</div>'
                 );
 
-            $('main').off().on('click', '#submit-phone-button', function (ev) {
+            $('.tier1').off().on('click', '#submit-phone-button', function (ev) {
 
                 ev.preventDefault();
 
@@ -295,7 +295,7 @@ $(document).ready(function (ev) {
             });
 
 
-            $('main').off().on('click', '#subscriber-pending_payments-button', function (e) {
+            $('.tier1').on('click', '#subscriber-pending_payments-button', function (e) {
 
                 e.preventDefault();
 
@@ -359,7 +359,7 @@ $(document).ready(function (ev) {
                     }).show();
                 });
 //bug: does not remove html from main
-                $('main').off().on('click', '.pay-bill-button', function (e) {
+                $('.tier1').off().on('click', '.pay-bill-button', function (e) {
                     e.preventDefault();
 
 
@@ -367,9 +367,6 @@ $(document).ready(function (ev) {
                     let userID = currow.find('td:eq(0)').text();
                     let phoneNumber = currow.find('td:eq(2)').text();
                     let service = currow.find('td:eq(3)').text();
-
-
-                    $(main).empty();
 
 
                     $.ajax({
@@ -380,12 +377,14 @@ $(document).ready(function (ev) {
                             "Authorization": localStorage.getItem("token")
                         }
                     }).done(function (body) {
+
                         new Noty({
                             text: "Successfully pay for - " + service + "for" + phoneNumber,
                             layout: 'topCenter',
                             type: 'success',
                             theme: 'mint',
                             timeout: 3000
+
                         }).show();
                     }).fail(function (xhr, status, error) {
                         new Noty({
@@ -397,21 +396,22 @@ $(document).ready(function (ev) {
                         }).show();
 
                     });
+
                 });
 
 
             });
-            $('main').on('click', '#subscriber-pay_all_payments-button', function (e) {
+            $('main').off().on('click', '#subscriber-pay_all_payments-button', function (e) {
                 e.preventDefault();
 
 
                 let currow = $(this).closest('tr');
                 let phoneNumber = currow.find('td:eq(2)').text();
-
+                alert(phoneNumber)
 
                 $.ajax({
                     type: 'GET',
-                    url: 'http://localhost:8080/bank/subscribers/pay/{phoneNumber}' + phoneNumber ,
+                    url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber,
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": localStorage.getItem("token")
@@ -568,7 +568,7 @@ $(document).ready(function (ev) {
                             '<div class="form-group">' +
                             // '<label for="averageSum" >Start Date:</label>' +
                             '<br>' +
-                            '<input type="text" name="averageSum" id="averageSum" value = "' + (json_obj)+ '" class="form-control">' +
+                            '<input type="text" name="averageSum" id="averageSum" value = "' + (json_obj) + '" class="form-control">' +
                             '</div>' +
                             '</div>' +
                             '</div>'
@@ -618,7 +618,7 @@ $(document).ready(function (ev) {
                             '<div class="form-group">' +
                             // '<label for="averageSum" >Start Date:</label>' +
                             '<br>' +
-                            '<input type="text" name="averageSum" id="averageSum" value = "' + (json_obj)+ '" class="form-control">' +
+                            '<input type="text" name="averageSum" id="averageSum" value = "' + (json_obj) + '" class="form-control">' +
                             '</div>' +
                             '</div>' +
                             '</div>'
