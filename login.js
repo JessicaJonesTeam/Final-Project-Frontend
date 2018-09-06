@@ -2,7 +2,9 @@ $(document).ready(function (ev) {
 
 
 
-    //<!-------------------ADMIN MODULE-----TESTED----------------!>
+    <!-- ============================================================== -->
+    <!-- Login Button -->
+    <!-- ============================================================== -->
 
 
     let auth = null;
@@ -30,8 +32,10 @@ $(document).ready(function (ev) {
 
             if (role === "ROLE_USER") {
                 window.location.href = "/bank";
-            } else {
+            } else if(role ==="ROLE_ADMIN"){
                 window.location.href = "/admin";
+            }else {
+                window.location.href="/change_password";
             }
         }).fail(function (xhr, status, error) {
             new Noty({

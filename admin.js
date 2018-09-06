@@ -17,8 +17,8 @@ $(document).ready(function (ev) {
         }).done((data) => {
 
             $('main')
-                .append(
-                    '<table class="table table-hover">' +
+                .html(
+                    '<table class="table table-hover" id="table">' +
                     '<thead>' +
                     '<tr>' +
                     '<th scope="col">ID</th>' +
@@ -31,9 +31,10 @@ $(document).ready(function (ev) {
                     '<tbody>');
             let json_obj = JSON.parse(data);
             for (let i in json_obj) {
+                console.log(i);
                 $('table')
-                    .html(
-                        '<tr class="table-active">' +
+                    .append(
+                        '<tr class="table-dark">' +
                         '<td>' + json_obj[i].id + '</td>' +
                         '<td>' + json_obj[i].username + '</td>' +
                         '<td>' + json_obj[i].email + '</td>' +
@@ -71,15 +72,15 @@ $(document).ready(function (ev) {
             var username = currow.find('td:eq(1)').text();
 
             $.ajax({
-                type: 'POST',
-                url: 'http://localhost:8080/admin/users/delete/' + userID,
+                type: 'DELETE',
+                url: 'http://localhost:8080/admin/users/delete/' + username,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
                 }
             }).done(function (body) {
                 new Noty({
-                    text: "Successfully deleted user - " + username + "!",
+                    text: "SUCCESSFULLY DELETE USER -" + username + "!",
                     layout: 'topCenter',
                     type: 'success',
                     theme: 'mint',
@@ -148,7 +149,7 @@ $(document).ready(function (ev) {
                         '<input type="email" name="email" id="email" value = "' + item.email + '" class="form-control">' +
                         '</div>' +
                         '<div class="form-group">' +
-                        '<button id = "save-user-button" type="button" name="submit" class=btn btn-primary" value="submit">Submit</button>' +
+                        '<button id = "save-user-button" type="button" class="btn btn-secondary" name="submit" value="submit">Submit</button>' +
                         '</div>' +
                         '</form>' +
                         '</div>' +
@@ -177,7 +178,7 @@ $(document).ready(function (ev) {
 
 
                 $.ajax({
-                    type: 'POST',
+                    type: 'PUT',
                     url: 'http://localhost:8080/admin/users/update',
                     headers: {
                         "Content-Type": "application/json",
@@ -197,7 +198,7 @@ $(document).ready(function (ev) {
 
                 }).done(function (body) {
                     new Noty({
-                        text: "Successfully edit user - " + username + "!",
+                        text: "SUCCESSFULLY EDIT USER - " + username + "!",
                         layout: 'topCenter',
                         type: 'success',
                         theme: 'mint',
@@ -259,7 +260,7 @@ $(document).ready(function (ev) {
                 '</select>' +
                 '<br>' +
                 '<div class="form-group">' +
-                '<button id = "submit-users-button" type="button" name="submit" class=btn btn-primary" value="submit">Submit</button>' +
+                '<button id = "submit-users-button" type="button" class="btn btn-secondary" name="submit" value="submit">Submit</button>' +
                 '</div>' +
                 '</form>' +
                 '</div>' +
@@ -301,7 +302,7 @@ $(document).ready(function (ev) {
 
             }).done(function (body) {
                 new Noty({
-                    text: "Successfully create user - " + username + "!",
+                    text: "SUCCESSFULLY CREATE USER - " + username + "!",
                     layout: 'topCenter',
                     type: 'success',
                     theme: 'mint',
@@ -316,7 +317,6 @@ $(document).ready(function (ev) {
                     timeout: 3000
                 }).show();
             });
-            $(main).empty();
 
         });
     });
@@ -405,7 +405,7 @@ $(document).ready(function (ev) {
                 '</select>' +
                 '</div>' +
                 '<div class="form-group">' +
-                '<button id = "submit-bill-button" type="button" name="submit" class=btn btn-primary" value="submit">Submit</button>' +
+                '<button id = "submit-bill-button" type="button" class="btn btn-secondary" name="submit"  value="submit">Submit</button>' +
                 '</div>' +
                 '</form>' +
                 '</div>' +
@@ -445,7 +445,7 @@ $(document).ready(function (ev) {
 
             }).done(function (body) {
                 new Noty({
-                    text: "Successfully create new payment for - " + subscriberPhone + "!",
+                    text: "SUCCESSFULLY CREATE NEW PAYMENT FOR - " + subscriberPhone + "!",
                     layout: 'topCenter',
                     type: 'success',
                     theme: 'mint',
@@ -464,6 +464,14 @@ $(document).ready(function (ev) {
             $(main).empty();
 
         });
+
     });
-});
+    $('#logout').click(function (){
+
+        localStorage.clear();
+        window.location.href = "/login.html";
+    });
+
+})
+;
 
