@@ -29,7 +29,6 @@ $(document).ready(function (ev) {
             auth = body["Authorization"];
             localStorage.setItem("token", auth);
             role = body["Role"];
-
             if (role === "ROLE_USER") {
                 window.location.href = "/bank";
             } else if(role ==="ROLE_ADMIN"){
