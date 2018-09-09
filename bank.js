@@ -11,7 +11,7 @@ $(document).ready(function (ev) {
 
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:8080/bank/bills',
+            url: 'http://localhost:8000/bank/bills',
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": localStorage.getItem("token")
@@ -42,7 +42,7 @@ $(document).ready(function (ev) {
             for (var i in json_obj) {
                 $('table')
                     .append(
-                        '<tr class="table-dark">' +
+                        '<tr >' +
                         '<td>' + json_obj[i].id + '</td>' +
                         '<td>' + json_obj[i].subscriber + '</td>' +
                         '<td>' + json_obj[i].phoneNumber + '</td>' +
@@ -83,7 +83,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
+                url: 'http://localhost:8000/bank/subscribers/pay/' + phoneNumber + '/' + userID,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -150,7 +150,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/bank/bills/unpaid/' + phoneNumber,
+                url: 'http://localhost:8000/bank/bills/unpaid/' + phoneNumber,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -181,7 +181,7 @@ $(document).ready(function (ev) {
                 for (let i in json_obj) {
                     $('table')
                         .append(
-                            '<tr class="table-dark">' +
+                            '<tr >' +
                             '<td>' + json_obj[i].id + '</td>' +
                             '<td>' + json_obj[i].subscriber + '</td>' +
                             '<td>' + json_obj[i].phoneNumber + '</td>' +
@@ -221,7 +221,7 @@ $(document).ready(function (ev) {
 
                 $.ajax({
                     type: 'GET',
-                    url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
+                    url: 'http://localhost:8000/bank/subscribers/pay/' + phoneNumber + '/' + userID,
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": localStorage.getItem("token")
@@ -263,7 +263,7 @@ $(document).ready(function (ev) {
 
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:8080/bank/subscribers',
+            url: 'http://localhost:8000/bank/subscribers',
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": localStorage.getItem("token")
@@ -290,7 +290,7 @@ $(document).ready(function (ev) {
             for (let i in json_obj) {
                 $('table')
                     .append(
-                        '<tr class="table-dark">' +
+                        '<tr >' +
                         '<td>' + json_obj[i].id + '</td>' +
                         '<td>' + json_obj[i].fullName + '</td>' +
                         '<td>' + json_obj[i].egn + '</td>' +
@@ -336,7 +336,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/bank/bills/unpaid/' + userPhoneNumber,
+                url: 'http://localhost:8000/bank/bills/unpaid/' + userPhoneNumber,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -366,7 +366,7 @@ $(document).ready(function (ev) {
                 for (let i in json_obj) {
                     $('table')
                         .append(
-                            '<tr class="table-dark">' +
+                            '<tr >' +
                             '<td>' + json_obj[i].id + '</td>' +
                             '<td>' + json_obj[i].subscriber + '</td>' +
                             '<td>' + json_obj[i].phoneNumber + '</td>' +
@@ -408,7 +408,7 @@ $(document).ready(function (ev) {
 
                 $.ajax({
                     type: 'GET',
-                    url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber + '/' + userID,
+                    url: 'http://localhost:8000/bank/subscribers/pay/' + phoneNumber + '/' + userID,
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": localStorage.getItem("token")
@@ -451,7 +451,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/bank/subscribers/pay/' + phoneNumber,
+                url: 'http://localhost:8000/bank/subscribers/pay/' + phoneNumber,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -488,7 +488,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/bank/subscribers/history/' + userPhoneNumber,
+                url: 'http://localhost:8000/bank/subscribers/history/' + userPhoneNumber,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -516,7 +516,7 @@ $(document).ready(function (ev) {
                 for (let i in json_obj) {
                     $('table')
                         .append(
-                            '<tr class="table-dark">' +
+                            '<tr >' +
                             '<td>' + json_obj[i].id + '</td>' +
                             '<td>' + json_obj[i].subscriber + '</td>' +
                             '<td>' + json_obj[i].phoneNumber + '</td>' +
@@ -597,7 +597,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/bank/subscribers/average/' + phoneNumber + '/' + startDate + ',' + endDate,
+                url: 'http://localhost:8000/bank/subscribers/average/' + phoneNumber + '/' + startDate + ',' + endDate,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -649,7 +649,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/bank/subscribers/max/' + phoneNumber + '/' + startDate + ',' + endDate,
+                url: 'http://localhost:8000/bank/subscribers/max/' + phoneNumber + '/' + startDate + ',' + endDate,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -697,7 +697,7 @@ $(document).ready(function (ev) {
 
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:8080/bank/bills/recent',
+            url: 'http://localhost:8000/bank/bills/recent',
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": localStorage.getItem("token")
@@ -726,7 +726,7 @@ $(document).ready(function (ev) {
             for (var i in json_obj) {
                 $('table')
                     .append(
-                        '<tr class="table-dark">' +
+                        '<tr >' +
                         '<td>' + json_obj[i].id + '</td>' +
                         '<td>' + json_obj[i].subscriber + '</td>' +
                         '<td>' + json_obj[i].phoneNumber + '</td>' +
@@ -763,7 +763,7 @@ $(document).ready(function (ev) {
 
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:8080/bank/subscribers/top',
+            url: 'http://localhost:8000/bank/subscribers/top',
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": localStorage.getItem("token")
@@ -788,7 +788,7 @@ $(document).ready(function (ev) {
             for (let i in json_obj) {
                 $('table')
                     .append(
-                        '<tr class="table-dark">' +
+                        '<tr >' +
                         '<td>' + json_obj[i].id + '</td>' +
                         '<td>' + json_obj[i].fullName + '</td>' +
                         '<td>' + json_obj[i].egn + '</td>' +
@@ -829,7 +829,7 @@ $(document).ready(function (ev) {
 
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:8080/bank/bills/history',
+            url: 'http://localhost:8000/bank/bills/history',
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": localStorage.getItem("token")
@@ -857,7 +857,7 @@ $(document).ready(function (ev) {
             for (let i in json_obj) {
                 $('table')
                     .append(
-                        '<tr class="table-dark">' +
+                        '<tr >' +
                         '<td>' + json_obj[i].id + '</td>' +
                         '<td>' + json_obj[i].subscriber + '</td>' +
                         '<td>' + json_obj[i].phoneNumber + '</td>' +
@@ -893,6 +893,6 @@ $(document).ready(function (ev) {
     $('#logout').click(function () {
 
         localStorage.clear();
-        window.location.href = "/login.html";
+        window.location.href = "/index.html";
     });
 });

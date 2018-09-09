@@ -14,7 +14,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8080/change_password',
+                url: 'http://localhost:8000/change_password',
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -26,7 +26,7 @@ $(document).ready(function (ev) {
 
                 // localStorage.clear()
 
-                window.location.href = "/login.html";
+                window.location.href = "/index.html";
             }).fail(function (xhr, status, error) {
                 new Noty({
                     text: 'ERROR [' + xhr['status'] + ']: ' + xhr['responseText'],

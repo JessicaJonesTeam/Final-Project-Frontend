@@ -8,7 +8,7 @@ $(document).ready(function (ev) {
 
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:8080/admin/users',
+            url: 'http://localhost:8000/admin/users',
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": localStorage.getItem("token")
@@ -34,7 +34,7 @@ $(document).ready(function (ev) {
                 console.log(i);
                 $('table')
                     .append(
-                        '<tr class="table-dark">' +
+                        '<tr >' +
                         '<td>' + json_obj[i].id + '</td>' +
                         '<td>' + json_obj[i].username + '</td>' +
                         '<td>' + json_obj[i].email + '</td>' +
@@ -73,7 +73,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'DELETE',
-                url: 'http://localhost:8080/admin/users/delete/' + username,
+                url: 'http://localhost:8000/admin/users/delete/' + username,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -108,7 +108,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8080/admin/users/' + userID,
+                url: 'http://localhost:8000/admin/users/' + userID,
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -179,7 +179,7 @@ $(document).ready(function (ev) {
 
                 $.ajax({
                     type: 'PUT',
-                    url: 'http://localhost:8080/admin/users/update',
+                    url: 'http://localhost:8000/admin/users/update',
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": localStorage.getItem("token")
@@ -226,9 +226,9 @@ $(document).ready(function (ev) {
         $('main')
             .html(
                 '<div class="container">' +
-                '<div id="login-row" class="row justify-content-center align-items-center">' +
-                '<div id="login-column" class="col-md-6">' +
-                '<div id="login-box" class="col-md-12">' +
+                '<div class="row justify-content-center align-items-center">' +
+                '<div class="col-md-6">' +
+                '<div class="col-md-12">' +
                 '<form id="login-form" class="form" action="" method="post">' +
                 '<h3 class="text-center">Create user</h3>' +
                 '<div class="form-group">' +
@@ -286,7 +286,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8080/admin/users/create',
+                url: 'http://localhost:8000/admin/users/create',
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -327,7 +327,7 @@ $(document).ready(function (ev) {
 //
 //     $.ajax({
 //         type: 'POST',
-//         url: 'http://localhost:8080/admin/users/update',
+//         url: 'http://localhost:8000/admin/users/update',
 //         headers: {
 //             "Content-Type": "application/json",
 //             "Authorization": localStorage.getItem("token")
@@ -428,7 +428,7 @@ $(document).ready(function (ev) {
 
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8080/admin/bills/create',
+                url: 'http://localhost:8000/admin/bills/create',
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": localStorage.getItem("token")
@@ -466,10 +466,10 @@ $(document).ready(function (ev) {
         });
 
     });
-    $('#logout').click(function (){
+    $('#logout').click(function () {
 
         localStorage.clear();
-        window.location.href = "/login.html";
+        window.location.href = "/index.html";
     });
 
 })
