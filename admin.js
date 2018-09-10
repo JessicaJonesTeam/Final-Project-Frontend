@@ -225,6 +225,8 @@ $(document).ready(function (ev) {
 
         $('main')
             .html(
+                '<br>'+
+                '<br>'+
                 '<div class="container">' +
                 '<div class="row justify-content-center align-items-center">' +
                 '<div class="col-md-6">' +
@@ -359,6 +361,8 @@ $(document).ready(function (ev) {
 
         $('main')
             .html(
+                '<br>'+
+                '<br>'+
                 '<div class="container">' +
                 '<div id="login-row" class="row justify-content-center align-items-center">' +
                 '<div id="login-column" class="col-md-6">' +
@@ -374,9 +378,9 @@ $(document).ready(function (ev) {
                 '<label for="service">Service:</label>' +
                 '<br>' +
                 '<select class="form-control" id = "service" name = "service">' +
-                '<option value="television">Television</option>' +
-                '<option value="internet">Internet</option>' +
-                '<option value="telephone">Telephone</option>' +
+                '<option value="TV">TV</option>' +
+                '<option value="INTERNET">INTERNET</option>' +
+                '<option value="PHONE">PHONE</option>' +
                 '</select>' +
                 '</div>' +
 
