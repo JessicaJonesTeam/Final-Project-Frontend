@@ -295,8 +295,8 @@ $(document).ready(function (ev) {
                         '<tr >' +
                         '<td>' + json_obj[i].id + '</td>' +
                         '<td>' + json_obj[i].fullName + '</td>' +
-                        '<td>' + json_obj[i].egn + '</td>' +
                         '<td>' + json_obj[i].phoneNumber + '</td>' +
+                        '<td>' + json_obj[i].egn + '</td>' +
                         '<td>' + json_obj[i].services[0] + " " +
                         json_obj[i].services[1] + " " +
                         json_obj[i].services[2] + '</td>' +
@@ -326,7 +326,7 @@ $(document).ready(function (ev) {
         });
 
         <!-- ============================================================== -->
-        <!-- Pending Paiments Button -->
+        <!-- Pending Payments Button -->
         <!-- ============================================================== -->
         $('.tier1').on('click', '#subscriber-pending_payments-button', function (e) {
 
